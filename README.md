@@ -37,23 +37,23 @@ spring.kafka.properties.security.protocol=SASL_SSL
 spring.kafka.properties.sasl.mechanism=PLAIN
 spring.kafka.properties.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="<username>" password="<password>";
 
+
+
 otel.exporter.otlp.endpoint=http://localhost:4317
 otel.metrics.exporter=otlp
-logging.level.io.micrometer=DEBUG
-logging.level.io.opentelemetry=DEBUG
 
+logging.level.io.micrometer=TRACE
+logging.level.io.opentelemetry=TRACE
 logging.level.org.springframework.boot.actuate.metrics=TRACE
+
+# Actuator configuration
+management.endpoints.web.exposure.include=*
+management.endpoints.web.base-path=/actuator
+management.endpoint.prometheus.enabled=true
 
 management.metrics.enable.kafka=true
 
-# Uncomment these to view the metrics via localhost:8081/actuator/prometheus
-# Actuator configuration
-# management.endpoints.web.exposure.include=*
-# management.endpoints.web.base-path=/actuator
-# management.endpoint.prometheus.enabled=true
-# server.port=8081
-
-
+server.port=8081
 ```
 
 3. Create a build
@@ -65,17 +65,12 @@ mvn clean package
 4. Run the jar file
 
 ```
-java -jar target/kafka_springboot_push_otel-0.0.1-SNAPSHOT.jar
+java -jar target/kafka_springboot_push_otel-0.0.1-SNAPSHOT.jar 
 ```
-
-5. Produce to Kafka
-
-```
-curl -X POST http://localhost:8081/send\?topic\=test-topic-1\&message\=HelloKafka
 
 # notice the logs
 
-Received message: HelloKafka
+Received message: test
 ```
 
 6. Get metrics
